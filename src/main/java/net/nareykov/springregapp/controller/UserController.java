@@ -1,5 +1,7 @@
 package net.nareykov.springregapp.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.nareykov.springregapp.model.User;
 import net.nareykov.springregapp.service.SecurityService;
 import net.nareykov.springregapp.service.UserService;
@@ -7,13 +9,13 @@ import net.nareykov.springregapp.validator.UserValidator;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.omg.CORBA.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.WebRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,17 +75,22 @@ public class UserController {
         return "welcome";
     }
 
-    @RequestMapping(value = "/social", method = RequestMethod.POST)
-    public String social(@RequestParam("token") String token,  Model model) {
-        String server = "http://localhost:8080";
-        System.out.println(token);
+    @RequestMapping(value = "/social")
+    public String social(WebRequest request, @RequestParam("token") String token, Model model) {
+        String server = request.getHeader("host");
 
-        /*PostMethod post = new PostMethod(String.format("http://ulogin.ru/token.php?token=%s&host=%s", token, server));
+        RestTemplate restTemplate = new RestTemplate();
+        String fooResourceUrl = "http://ulogin.ru/token.php?token=" + token + "&host=" + server;
+        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = null;
         try {
-            System.out.println(post.getResponseBodyAsStream().toString());
+            root = mapper.readTree(response.getBody());
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
+        System.out.println(root.asText());
 
         return "welcome";
     }
