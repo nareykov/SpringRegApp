@@ -40,6 +40,9 @@
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
             <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
+
+            <script src="//ulogin.ru/js/ulogin.js"></script>
+            <div id="uLogin" data-ulogin="display=panel;theme=flat;fields=first_name,last_name;providers=vkontakte,twitter,facebook;hidden=other;redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fsocial;mobilebuttons=0;"></div>
         </div>
 
     </form>

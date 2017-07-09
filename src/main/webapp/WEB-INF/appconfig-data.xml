@@ -38,5 +38,5 @@
 
     <tx:annotation-driven/>
 
-    <jpa:repositories base-package="net.proselyte.springsecurityapp.dao"/>
+    <jpa:repositories base-package="net.nareykov.springregapp.dao"/>
 </beans>
