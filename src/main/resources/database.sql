@@ -4,5 +4,3 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL
 )
   ENGINE = InnoDB;
-
-INSERT INTO users VALUES (1, 'nareykov', 'nareykov');

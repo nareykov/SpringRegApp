@@ -78,11 +78,13 @@ public class UserController {
     @RequestMapping(value = "/social")
     public String social(WebRequest request, @RequestParam("token") String token, Model model) {
         String server = request.getHeader("host");
-
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "http://ulogin.ru/token.php?token=" + token + "&host=" + server;
-        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
+        String url = "http://ulogin.ru/token.php?token=" + token + "&host=" + server;
+        parseJson(restTemplate.getForEntity(url, String.class), model);
+        return "welcome";
+    }
 
+    private void parseJson(ResponseEntity<String> response,  Model model) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = null;
         try {
@@ -90,8 +92,7 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(root.asText());
-
-        return "welcome";
+        model.addAttribute("username", root.get("first_name").asText() + ' ' + root.get("last_name").asText());
+        model.addAttribute("network", root.get("network").asText());
     }
 }
